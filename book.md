@@ -317,3 +317,152 @@ employees.some(emp => emp.id === 1); // true
 ```
 
 ---
+
+### `indexOf`
+
+**Definition:** Returns the index of the first occurrence of a given value in the array. If the value is not found, it returns `-1`. Like `includes`, it uses strict equality (`===`), so it is best suited for primitives like strings and numbers.
+
+```js
+const allSkills = employees.flatMap(emp => emp.skills);
+
+console.log(allSkills.indexOf("Python"));     // 7
+console.log(allSkills.indexOf("TypeScript")); // -1
+```
+
+When a value appears more than once, `indexOf` only returns the first occurrence. You can find subsequent ones by passing a second argument — the index to start searching from:
+
+```js
+console.log(allSkills.indexOf("JavaScript"));     // 0  (first occurrence)
+console.log(allSkills.indexOf("JavaScript", 1));  // 3  (next one, starting after index 0)
+console.log(allSkills.indexOf("JavaScript", 4));  // 6  (next one, starting after index 3)
+```
+
+---
+
+### `push`
+
+**Definition:** Adds one or more elements to the **end** of an array and returns the new length of the array. It mutates the original array.
+
+```js
+const activeNames = employees
+  .filter(emp => emp.active)
+  .map(emp => emp.name);
+
+console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace"]
+
+activeNames.push("Henry");
+
+console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace", "Henry"]
+console.log(activeNames.length); // 6
+```
+
+You can push multiple values at once:
+
+```js
+activeNames.push("Iris", "James");
+
+console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace", "Henry", "Iris", "James"]
+```
+
+---
+
+### `pop`
+
+**Definition:** Removes the **last** element from an array and returns it. It mutates the original array.
+
+```js
+const activeNames = employees
+  .filter(emp => emp.active)
+  .map(emp => emp.name);
+
+console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace"]
+
+const last = activeNames.pop();
+
+console.log(last);        // "Grace"
+console.log(activeNames); // ["Alice", "Bob", "David", "Eva"]
+```
+
+`push` and `pop` together make arrays work like a **stack** — last in, first out.
+
+---
+
+### `shift`
+
+**Definition:** Removes the **first** element from an array and returns it. It mutates the original array. Every remaining element shifts down one index position.
+
+```js
+const activeNames = employees
+  .filter(emp => emp.active)
+  .map(emp => emp.name);
+
+console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace"]
+
+const first = activeNames.shift();
+
+console.log(first);       // "Alice"
+console.log(activeNames); // ["Bob", "David", "Eva", "Grace"]
+```
+
+---
+
+### `unshift`
+
+**Definition:** Adds one or more elements to the **beginning** of an array and returns the new length. It mutates the original array. Every existing element shifts up one index position.
+
+```js
+const activeNames = employees
+  .filter(emp => emp.active)
+  .map(emp => emp.name);
+
+console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace"]
+
+activeNames.unshift("Henry");
+
+console.log(activeNames); // ["Henry", "Alice", "Bob", "David", "Eva", "Grace"]
+```
+
+`unshift` and `shift` together make arrays work like a **queue** — first in, first out. Add to the end with `push`, take from the front with `shift`.
+
+---
+
+### `splice`
+
+**Definition:** Changes the contents of an array by removing, replacing, or inserting elements at a specific position. It mutates the original array and returns an array of the removed elements.
+
+Its signature is: `array.splice(startIndex, deleteCount, ...itemsToInsert)`
+
+- `startIndex` — where to begin making changes
+- `deleteCount` — how many elements to remove (0 means none)
+- `...itemsToInsert` — optional elements to insert at that position
+
+```js
+const names = employees.map(emp => emp.name);
+// ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
+
+// Remove 1 element at index 2 (Carol)
+const removed = names.splice(2, 1);
+
+console.log(removed); // ["Carol"]
+console.log(names);   // ["Alice", "Bob", "David", "Eva", "Frank", "Grace"]
+```
+
+Insert without removing by passing `0` as the delete count:
+
+```js
+// Insert "Henry" at index 2, without removing anything
+names.splice(2, 0, "Henry");
+
+console.log(names); // ["Alice", "Bob", "Henry", "David", "Eva", "Frank", "Grace"]
+```
+
+Replace by removing and inserting in one call:
+
+```js
+// Replace "Frank" (index 5) with "Iris"
+names.splice(5, 1, "Iris");
+
+console.log(names); // ["Alice", "Bob", "Henry", "David", "Eva", "Iris", "Grace"]
+```
+
+---
