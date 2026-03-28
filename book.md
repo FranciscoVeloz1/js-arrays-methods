@@ -466,3 +466,262 @@ console.log(names); // ["Alice", "Bob", "Henry", "David", "Eva", "Iris", "Grace"
 ```
 
 ---
+
+### `slice`
+
+**Definition:** Returns a new array containing a portion of the original, from a start index up to (but not including) an end index. It does not mutate the original array.
+
+Its signature is: `array.slice(startIndex, endIndex)`
+
+```js
+const names = employees.map(emp => emp.name);
+// ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
+
+// Get the first three employees
+const firstThree = names.slice(0, 3);
+
+console.log(firstThree); // ["Alice", "Bob", "Carol"]
+console.log(names);      // ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"] (unchanged)
+```
+
+Omitting the end index goes all the way to the end of the array:
+
+```js
+// Everyone from index 4 onwards
+const lastOnes = names.slice(4);
+
+console.log(lastOnes); // ["Eva", "Frank", "Grace"]
+```
+
+Negative indices count from the end:
+
+```js
+// Get the last 2 employees
+const lastTwo = names.slice(-2);
+
+console.log(lastTwo); // ["Frank", "Grace"]
+```
+
+---
+
+### `concat`
+
+**Definition:** Merges two or more arrays into a new array, without mutating any of the originals. It can also accept plain values (not just arrays) and will append them as individual elements.
+
+```js
+const engineering = company.departments[0].employees.map(emp => emp.name);
+// ["Alice", "Bob", "Carol"]
+
+const design = company.departments[1].employees.map(emp => emp.name);
+// ["David", "Eva"]
+
+const marketing = company.departments[2].employees.map(emp => emp.name);
+// ["Frank", "Grace"]
+
+const allNames = engineering.concat(design, marketing);
+
+console.log(allNames);
+// ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
+```
+
+You can also append individual values:
+
+```js
+const updated = engineering.concat("Henry", "Iris");
+
+console.log(updated); // ["Alice", "Bob", "Carol", "Henry", "Iris"]
+```
+
+---
+
+### `join`
+
+**Definition:** Joins all elements of an array into a single string, with a separator between each element. The separator defaults to a comma if not specified. It does not mutate the original array.
+
+```js
+const names = employees.map(emp => emp.name);
+
+console.log(names.join(", "));  // "Alice, Bob, Carol, David, Eva, Frank, Grace"
+console.log(names.join(" | ")); // "Alice | Bob | Carol | David | Eva | Frank | Grace"
+console.log(names.join(""));    // "AliceBobCarolDavidEvaFrankGrace"
+```
+
+A practical use: generating a readable summary line per employee.
+
+```js
+const aliceSkills = employees[0].skills.join(", ");
+
+console.log(`Alice knows: ${aliceSkills}`);
+// "Alice knows: JavaScript, Node.js, React"
+```
+
+---
+
+### `sort`
+
+**Definition:** Sorts the elements of an array **in place** and returns the sorted array. It mutates the original. By default, it sorts by converting elements to strings and comparing them — which works for strings but gives wrong results for numbers.
+
+```js
+const names = employees.map(emp => emp.name);
+
+names.sort();
+
+console.log(names);
+// ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
+```
+
+For numbers, the default sort is broken — it compares digits as characters, not values:
+
+```js
+const salaries = employees.map(emp => emp.salary);
+
+salaries.sort();
+
+console.log(salaries);
+// [110000, 52000, 55000, 60000, 70000, 75000, 95000]
+// Wrong! "1" comes before "5" alphabetically, so 110000 ends up first
+```
+
+To sort numbers correctly, pass a **comparator function**. This is a function you write that tells `sort` how to order any two elements. `sort` will call it repeatedly with pairs of values — `a` and `b` — and use your return value to decide their order:
+
+- return a **negative number** → `a` goes before `b`
+- return a **positive number** → `b` goes before `a`
+- return **`0`** → leave them in the same order
+
+The trick for numbers is that subtraction already gives you exactly those results:
+
+```js
+// 52000 vs 95000: 52000 - 95000 = -43000 (negative) → 52000 comes first ✓
+// 95000 vs 52000: 95000 - 52000 = +43000 (positive) → 52000 still comes first ✓
+// 70000 vs 70000: 70000 - 70000 = 0 → keep them as-is ✓
+
+salaries.sort((a, b) => a - b);
+
+console.log(salaries);
+// [52000, 55000, 60000, 70000, 75000, 95000, 110000]
+```
+
+To sort descending, just flip `a` and `b`:
+
+```js
+salaries.sort((a, b) => b - a);
+
+console.log(salaries);
+// [110000, 95000, 75000, 70000, 60000, 55000, 52000]
+```
+
+To understand what `sort` is doing under the hood, here is roughly the same logic written with nested `for` loops (a bubble sort):
+
+```js
+const salaries = employees.map(emp => emp.salary);
+
+for (let i = 0; i < salaries.length; i++) {
+  for (let j = 0; j < salaries.length - i - 1; j++) {
+    if (salaries[j] > salaries[j + 1]) {
+      // Swap the two elements
+      const temp = salaries[j];
+      salaries[j] = salaries[j + 1];
+      salaries[j + 1] = temp;
+    }
+  }
+}
+
+console.log(salaries);
+// [52000, 55000, 60000, 70000, 75000, 95000, 110000]
+```
+
+`sort` handles all of this for you — the looping, the comparisons, the swapping — and uses a more efficient algorithm internally. All you provide is the rule for comparing two values.
+
+The comparator works for objects too — sort employees by salary, lowest to highest:
+
+```js
+const sorted = [...employees].sort((a, b) => a.salary - b.salary);
+//              ^^^^^^^^^^^^^ spread into a copy first to avoid mutating the original
+
+console.log(sorted.map(emp => `${emp.name}: $${emp.salary}`));
+// ["Grace: $52000", "Bob: $55000", "Frank: $60000", "David: $70000", "Eva: $75000", "Alice: $95000", "Carol: $110000"]
+```
+
+---
+
+### `reverse`
+
+**Definition:** Reverses the order of the elements in an array **in place** and returns the array. It mutates the original.
+
+```js
+const names = employees.map(emp => emp.name);
+// ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
+
+names.reverse();
+
+console.log(names);
+// ["Grace", "Frank", "Eva", "David", "Carol", "Bob", "Alice"]
+```
+
+Because `sort` also returns the array, `reverse` is commonly chained after it to get a descending sort:
+
+```js
+const names = employees.map(emp => emp.name);
+
+names.sort().reverse();
+
+console.log(names);
+// ["Grace", "Frank", "Eva", "David", "Carol", "Bob", "Alice"]
+```
+
+If you need to reverse without mutating the original, spread into a copy first:
+
+```js
+const reversed = [...names].reverse();
+```
+
+---
+
+### `flat`
+
+**Definition:** Returns a new array with nested arrays unpacked into it — their items are pulled out and placed directly in the outer array. It does not mutate the original array.
+
+The easiest way to picture it: imagine removing one layer of brackets from the nested arrays.
+
+```js
+const skillsByEmployee = employees.map(emp => emp.skills);
+// map gives us an array of arrays — one inner array per employee:
+// [
+//   ["JavaScript", "Node.js", "React"],  ← Alice
+//   ["JavaScript", "CSS"],               ← Bob
+//   ["JavaScript", "Python", "AWS"],     ← Carol
+//   ...
+// ]
+
+const allSkills = skillsByEmployee.flat();
+// flat removes one layer of brackets, pulling every skill into a single array:
+// ["JavaScript", "Node.js", "React", "JavaScript", "CSS", "JavaScript", "Python", "AWS", ...]
+```
+
+The **depth** argument controls how many layers of brackets to remove. The default is `1`:
+
+```js
+// Depth 0: nothing happens
+[["Alice", "Bob"], ["Carol"]].flat(0);
+// [["Alice", "Bob"], ["Carol"]]  — unchanged
+
+// Depth 1 (default): removes one layer
+[["Alice", "Bob"], ["Carol"]].flat(1);
+// ["Alice", "Bob", "Carol"]
+
+// Depth 2: removes two layers
+[["Alice", ["Bob"]], ["Carol"]].flat(2);
+// ["Alice", "Bob", "Carol"]
+//                  ^^^^^ "Bob" was two levels deep, now it's out
+```
+
+Use `Infinity` when you don't know how deeply nested the array is and just want everything flat:
+
+```js
+[["Alice", ["Bob", ["Carol"]]]].flat(Infinity);
+// ["Alice", "Bob", "Carol"]
+```
+
+When you need to both map and flatten by one level, `flatMap` is the more efficient choice over chaining `.map().flat()`.
+
+---

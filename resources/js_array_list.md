@@ -22,7 +22,7 @@
 20. reverse
 21. flat
 22. flatMap
-23. fill
+23. fill  -- claude --resume f7ebe436-3b9e-4e81-9f20-8d1394b88141
 24. copyWithin
 25. entries
 26. keys
