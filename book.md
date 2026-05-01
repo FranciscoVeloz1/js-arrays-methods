@@ -20,32 +20,81 @@ const company = {
       name: "Engineering",
       budget: 120000,
       employees: [
-        { id: 1, name: "Alice", role: "Senior Dev", salary: 95000, active: true, skills: ["JavaScript", "Node.js", "React"] },
-        { id: 2, name: "Bob", role: "Junior Dev", salary: 55000, active: true, skills: ["JavaScript", "CSS"] },
-        { id: 3, name: "Carol", role: "Tech Lead", salary: 110000, active: false, skills: ["JavaScript", "Python", "AWS"] },
+        {
+          id: 1,
+          name: "Alice",
+          role: "Senior Dev",
+          salary: 95000,
+          active: true,
+          skills: ["JavaScript", "Node.js", "React"],
+        },
+        {
+          id: 2,
+          name: "Bob",
+          role: "Junior Dev",
+          salary: 55000,
+          active: true,
+          skills: ["JavaScript", "CSS"],
+        },
+        {
+          id: 3,
+          name: "Carol",
+          role: "Tech Lead",
+          salary: 110000,
+          active: false,
+          skills: ["JavaScript", "Python", "AWS"],
+        },
       ],
     },
     {
       name: "Design",
       budget: 80000,
       employees: [
-        { id: 4, name: "David", role: "UI Designer", salary: 70000, active: true, skills: ["Figma", "CSS", "Illustrator"] },
-        { id: 5, name: "Eva", role: "UX Researcher", salary: 75000, active: true, skills: ["User Testing", "Figma"] },
+        {
+          id: 4,
+          name: "David",
+          role: "UI Designer",
+          salary: 70000,
+          active: true,
+          skills: ["Figma", "CSS", "Illustrator"],
+        },
+        {
+          id: 5,
+          name: "Eva",
+          role: "UX Researcher",
+          salary: 75000,
+          active: true,
+          skills: ["User Testing", "Figma"],
+        },
       ],
     },
     {
       name: "Marketing",
       budget: 60000,
       employees: [
-        { id: 6, name: "Frank", role: "SEO Specialist", salary: 60000, active: false, skills: ["SEO", "Google Ads"] },
-        { id: 7, name: "Grace", role: "Content Writer", salary: 52000, active: true, skills: ["Copywriting", "SEO"] },
+        {
+          id: 6,
+          name: "Frank",
+          role: "SEO Specialist",
+          salary: 60000,
+          active: false,
+          skills: ["SEO", "Google Ads"],
+        },
+        {
+          id: 7,
+          name: "Grace",
+          role: "Content Writer",
+          salary: 52000,
+          active: true,
+          skills: ["Copywriting", "SEO"],
+        },
       ],
     },
   ],
 };
 
 // Flat list of all employees used in most examples
-const employees = company.departments.flatMap(d => d.employees);
+const employees = company.departments.flatMap((d) => d.employees);
 ```
 
 ---
@@ -60,7 +109,7 @@ const employees = company.departments.flatMap(d => d.employees);
 
 ```js
 // Get a flat list of every skill offered across all employees
-const allSkills = employees.flatMap(emp => emp.skills);
+const allSkills = employees.flatMap((emp) => emp.skills);
 
 console.log(allSkills);
 // [
@@ -77,7 +126,7 @@ console.log(allSkills);
 Without `flatMap`, you'd get an array of arrays:
 
 ```js
-employees.map(emp => emp.skills);
+employees.map((emp) => emp.skills);
 // [["JavaScript", "Node.js", "React"], ["JavaScript", "CSS"], ...]
 ```
 
@@ -85,8 +134,8 @@ employees.map(emp => emp.skills);
 
 ```js
 // For active employees only, return a "{name} ({role})" badge
-const badges = employees.flatMap(emp =>
-  emp.active ? [`${emp.name} (${emp.role})`] : []
+const badges = employees.flatMap((emp) =>
+  emp.active ? [`${emp.name} (${emp.role})`] : [],
 );
 
 console.log(badges);
@@ -101,7 +150,7 @@ console.log(badges);
 
 ```js
 // Extract just the name and salary of each employee
-const salaryCards = employees.map(emp => ({
+const salaryCards = employees.map((emp) => ({
   name: emp.name,
   salary: emp.salary,
 }));
@@ -126,9 +175,9 @@ console.log(salaryCards);
 
 ```js
 // Get only the currently active employees
-const activeEmployees = employees.filter(emp => emp.active);
+const activeEmployees = employees.filter((emp) => emp.active);
 
-console.log(activeEmployees.map(e => e.name));
+console.log(activeEmployees.map((e) => e.name));
 // ["Alice", "Bob", "David", "Eva", "Grace"]
 ```
 
@@ -140,9 +189,11 @@ console.log(activeEmployees.map(e => e.name));
 
 ```js
 // Log a summary line for each employee
-employees.forEach(emp => {
+employees.forEach((emp) => {
   const status = emp.active ? "Active" : "Inactive";
-  console.log(`[${status}] ${emp.name} — ${emp.role} ($${emp.salary.toLocaleString()})`);
+  console.log(
+    `[${status}] ${emp.name} — ${emp.role} ($${emp.salary.toLocaleString()})`,
+  );
 });
 
 // [Active]   Alice — Senior Dev ($95,000)
@@ -206,9 +257,9 @@ console.log(employeeById[5].role); // "UX Researcher"
 
 ```js
 // Find the first employee earning over $90,000
-const highEarner = employees.find(emp => emp.salary > 90000);
+const highEarner = employees.find((emp) => emp.salary > 90000);
 
-console.log(highEarner.name);   // "Alice"
+console.log(highEarner.name); // "Alice"
 console.log(highEarner.salary); // 95000
 ```
 
@@ -216,7 +267,7 @@ If no match exists, `find` returns `undefined` — always guard against that whe
 
 ```js
 // Look up an employee by id
-const employee = employees.find(emp => emp.id === 4);
+const employee = employees.find((emp) => emp.id === 4);
 
 console.log(employee?.name); // "David"
 ```
@@ -229,17 +280,17 @@ console.log(employee?.name); // "David"
 
 ```js
 // Find the position of the first inactive employee
-const firstInactiveIndex = employees.findIndex(emp => !emp.active);
+const firstInactiveIndex = employees.findIndex((emp) => !emp.active);
 
-console.log(firstInactiveIndex);                    // 2
-console.log(employees[firstInactiveIndex].name);    // "Carol"
+console.log(firstInactiveIndex); // 2
+console.log(employees[firstInactiveIndex].name); // "Carol"
 ```
 
 A return value of `-1` means no match was found — check for it before using the index:
 
 ```js
 // Find the index of the employee named "Eva"
-const evaIndex = employees.findIndex(emp => emp.name === "Eva");
+const evaIndex = employees.findIndex((emp) => emp.name === "Eva");
 
 if (evaIndex !== -1) {
   console.log(`Eva is at index ${evaIndex}`); // "Eva is at index 4"
@@ -252,18 +303,18 @@ if (evaIndex !== -1) {
 
 **Definition:** Returns `true` if at least one element in the array passes the provided test. Returns `false` if none do. It stops iterating the moment it finds a match, so it never processes more elements than necessary.
 
-Think of it as asking: *"Does any element satisfy this condition?"*
+Think of it as asking: _"Does any element satisfy this condition?"_
 
 ```js
 // Check if any employee is inactive
-const hasInactive = employees.some(emp => !emp.active);
+const hasInactive = employees.some((emp) => !emp.active);
 
 console.log(hasInactive); // true
 ```
 
 ```js
 // Check if any employee earns over $100,000
-const hasSixFigure = employees.some(emp => emp.salary > 100000);
+const hasSixFigure = employees.some((emp) => emp.salary > 100000);
 
 console.log(hasSixFigure); // true  (Carol earns $110,000)
 ```
@@ -274,18 +325,18 @@ console.log(hasSixFigure); // true  (Carol earns $110,000)
 
 **Definition:** Returns `true` only if every element in the array passes the provided test. As soon as one element fails, it stops and returns `false`.
 
-Think of it as asking: *"Do all elements satisfy this condition?"*
+Think of it as asking: _"Do all elements satisfy this condition?"_
 
 ```js
 // Check if all employees have JavaScript as a skill
-const allKnowJS = employees.every(emp => emp.skills.includes("JavaScript"));
+const allKnowJS = employees.every((emp) => emp.skills.includes("JavaScript"));
 
 console.log(allKnowJS); // false  (David, Eva, Frank, and Grace don't have it)
 ```
 
 ```js
 // Check if all employees earn at least $50,000
-const allAboveMinimum = employees.every(emp => emp.salary >= 50000);
+const allAboveMinimum = employees.every((emp) => emp.salary >= 50000);
 
 console.log(allAboveMinimum); // true
 ```
@@ -300,9 +351,9 @@ console.log(allAboveMinimum); // true
 
 ```js
 // Check if a specific skill exists anywhere in the skills list
-const allSkills = employees.flatMap(emp => emp.skills);
+const allSkills = employees.flatMap((emp) => emp.skills);
 
-console.log(allSkills.includes("Python"));    // true
+console.log(allSkills.includes("Python")); // true
 console.log(allSkills.includes("TypeScript")); // false
 ```
 
@@ -313,7 +364,7 @@ Note that `includes` checks for a value directly — it cannot test against a co
 employees.includes({ id: 1 }); // false
 
 // Use some when you need to match by a property
-employees.some(emp => emp.id === 1); // true
+employees.some((emp) => emp.id === 1); // true
 ```
 
 ---
@@ -323,18 +374,18 @@ employees.some(emp => emp.id === 1); // true
 **Definition:** Returns the index of the first occurrence of a given value in the array. If the value is not found, it returns `-1`. Like `includes`, it uses strict equality (`===`), so it is best suited for primitives like strings and numbers.
 
 ```js
-const allSkills = employees.flatMap(emp => emp.skills);
+const allSkills = employees.flatMap((emp) => emp.skills);
 
-console.log(allSkills.indexOf("Python"));     // 7
+console.log(allSkills.indexOf("Python")); // 7
 console.log(allSkills.indexOf("TypeScript")); // -1
 ```
 
 When a value appears more than once, `indexOf` only returns the first occurrence. You can find subsequent ones by passing a second argument — the index to start searching from:
 
 ```js
-console.log(allSkills.indexOf("JavaScript"));     // 0  (first occurrence)
-console.log(allSkills.indexOf("JavaScript", 1));  // 3  (next one, starting after index 0)
-console.log(allSkills.indexOf("JavaScript", 4));  // 6  (next one, starting after index 3)
+console.log(allSkills.indexOf("JavaScript")); // 0  (first occurrence)
+console.log(allSkills.indexOf("JavaScript", 1)); // 3  (next one, starting after index 0)
+console.log(allSkills.indexOf("JavaScript", 4)); // 6  (next one, starting after index 3)
 ```
 
 ---
@@ -345,8 +396,8 @@ console.log(allSkills.indexOf("JavaScript", 4));  // 6  (next one, starting afte
 
 ```js
 const activeNames = employees
-  .filter(emp => emp.active)
-  .map(emp => emp.name);
+  .filter((emp) => emp.active)
+  .map((emp) => emp.name);
 
 console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace"]
 
@@ -372,14 +423,14 @@ console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace", "Henry", 
 
 ```js
 const activeNames = employees
-  .filter(emp => emp.active)
-  .map(emp => emp.name);
+  .filter((emp) => emp.active)
+  .map((emp) => emp.name);
 
 console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace"]
 
 const last = activeNames.pop();
 
-console.log(last);        // "Grace"
+console.log(last); // "Grace"
 console.log(activeNames); // ["Alice", "Bob", "David", "Eva"]
 ```
 
@@ -393,14 +444,14 @@ console.log(activeNames); // ["Alice", "Bob", "David", "Eva"]
 
 ```js
 const activeNames = employees
-  .filter(emp => emp.active)
-  .map(emp => emp.name);
+  .filter((emp) => emp.active)
+  .map((emp) => emp.name);
 
 console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace"]
 
 const first = activeNames.shift();
 
-console.log(first);       // "Alice"
+console.log(first); // "Alice"
 console.log(activeNames); // ["Bob", "David", "Eva", "Grace"]
 ```
 
@@ -412,8 +463,8 @@ console.log(activeNames); // ["Bob", "David", "Eva", "Grace"]
 
 ```js
 const activeNames = employees
-  .filter(emp => emp.active)
-  .map(emp => emp.name);
+  .filter((emp) => emp.active)
+  .map((emp) => emp.name);
 
 console.log(activeNames); // ["Alice", "Bob", "David", "Eva", "Grace"]
 
@@ -437,14 +488,14 @@ Its signature is: `array.splice(startIndex, deleteCount, ...itemsToInsert)`
 - `...itemsToInsert` — optional elements to insert at that position
 
 ```js
-const names = employees.map(emp => emp.name);
+const names = employees.map((emp) => emp.name);
 // ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
 
 // Remove 1 element at index 2 (Carol)
 const removed = names.splice(2, 1);
 
 console.log(removed); // ["Carol"]
-console.log(names);   // ["Alice", "Bob", "David", "Eva", "Frank", "Grace"]
+console.log(names); // ["Alice", "Bob", "David", "Eva", "Frank", "Grace"]
 ```
 
 Insert without removing by passing `0` as the delete count:
@@ -474,14 +525,14 @@ console.log(names); // ["Alice", "Bob", "Henry", "David", "Eva", "Iris", "Grace"
 Its signature is: `array.slice(startIndex, endIndex)`
 
 ```js
-const names = employees.map(emp => emp.name);
+const names = employees.map((emp) => emp.name);
 // ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
 
 // Get the first three employees
 const firstThree = names.slice(0, 3);
 
 console.log(firstThree); // ["Alice", "Bob", "Carol"]
-console.log(names);      // ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"] (unchanged)
+console.log(names); // ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"] (unchanged)
 ```
 
 Omitting the end index goes all the way to the end of the array:
@@ -509,13 +560,13 @@ console.log(lastTwo); // ["Frank", "Grace"]
 **Definition:** Merges two or more arrays into a new array, without mutating any of the originals. It can also accept plain values (not just arrays) and will append them as individual elements.
 
 ```js
-const engineering = company.departments[0].employees.map(emp => emp.name);
+const engineering = company.departments[0].employees.map((emp) => emp.name);
 // ["Alice", "Bob", "Carol"]
 
-const design = company.departments[1].employees.map(emp => emp.name);
+const design = company.departments[1].employees.map((emp) => emp.name);
 // ["David", "Eva"]
 
-const marketing = company.departments[2].employees.map(emp => emp.name);
+const marketing = company.departments[2].employees.map((emp) => emp.name);
 // ["Frank", "Grace"]
 
 const allNames = engineering.concat(design, marketing);
@@ -539,11 +590,11 @@ console.log(updated); // ["Alice", "Bob", "Carol", "Henry", "Iris"]
 **Definition:** Joins all elements of an array into a single string, with a separator between each element. The separator defaults to a comma if not specified. It does not mutate the original array.
 
 ```js
-const names = employees.map(emp => emp.name);
+const names = employees.map((emp) => emp.name);
 
-console.log(names.join(", "));  // "Alice, Bob, Carol, David, Eva, Frank, Grace"
+console.log(names.join(", ")); // "Alice, Bob, Carol, David, Eva, Frank, Grace"
 console.log(names.join(" | ")); // "Alice | Bob | Carol | David | Eva | Frank | Grace"
-console.log(names.join(""));    // "AliceBobCarolDavidEvaFrankGrace"
+console.log(names.join("")); // "AliceBobCarolDavidEvaFrankGrace"
 ```
 
 A practical use: generating a readable summary line per employee.
@@ -562,7 +613,7 @@ console.log(`Alice knows: ${aliceSkills}`);
 **Definition:** Sorts the elements of an array **in place** and returns the sorted array. It mutates the original. By default, it sorts by converting elements to strings and comparing them — which works for strings but gives wrong results for numbers.
 
 ```js
-const names = employees.map(emp => emp.name);
+const names = employees.map((emp) => emp.name);
 
 names.sort();
 
@@ -573,7 +624,7 @@ console.log(names);
 For numbers, the default sort is broken — it compares digits as characters, not values:
 
 ```js
-const salaries = employees.map(emp => emp.salary);
+const salaries = employees.map((emp) => emp.salary);
 
 salaries.sort();
 
@@ -613,7 +664,7 @@ console.log(salaries);
 To understand what `sort` is doing under the hood, here is roughly the same logic written with nested `for` loops (a bubble sort):
 
 ```js
-const salaries = employees.map(emp => emp.salary);
+const salaries = employees.map((emp) => emp.salary);
 
 for (let i = 0; i < salaries.length; i++) {
   for (let j = 0; j < salaries.length - i - 1; j++) {
@@ -638,7 +689,7 @@ The comparator works for objects too — sort employees by salary, lowest to hig
 const sorted = [...employees].sort((a, b) => a.salary - b.salary);
 //              ^^^^^^^^^^^^^ spread into a copy first to avoid mutating the original
 
-console.log(sorted.map(emp => `${emp.name}: $${emp.salary}`));
+console.log(sorted.map((emp) => `${emp.name}: $${emp.salary}`));
 // ["Grace: $52000", "Bob: $55000", "Frank: $60000", "David: $70000", "Eva: $75000", "Alice: $95000", "Carol: $110000"]
 ```
 
@@ -649,7 +700,7 @@ console.log(sorted.map(emp => `${emp.name}: $${emp.salary}`));
 **Definition:** Reverses the order of the elements in an array **in place** and returns the array. It mutates the original.
 
 ```js
-const names = employees.map(emp => emp.name);
+const names = employees.map((emp) => emp.name);
 // ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
 
 names.reverse();
@@ -661,7 +712,7 @@ console.log(names);
 Because `sort` also returns the array, `reverse` is commonly chained after it to get a descending sort:
 
 ```js
-const names = employees.map(emp => emp.name);
+const names = employees.map((emp) => emp.name);
 
 names.sort().reverse();
 
@@ -684,7 +735,7 @@ const reversed = [...names].reverse();
 The easiest way to picture it: imagine removing one layer of brackets from the nested arrays.
 
 ```js
-const skillsByEmployee = employees.map(emp => emp.skills);
+const skillsByEmployee = employees.map((emp) => emp.skills);
 // map gives us an array of arrays — one inner array per employee:
 // [
 //   ["JavaScript", "Node.js", "React"],  ← Alice
