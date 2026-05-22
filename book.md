@@ -776,3 +776,50 @@ Use `Infinity` when you don't know how deeply nested the array is and just want 
 When you need to both map and flatten by one level, `flatMap` is the more efficient choice over chaining `.map().flat()`.
 
 ---
+
+### `fill`
+
+**Definition:** Sets all elements in an array from a start index to an end index (exclusive) to a given value. It mutates the original array and is useful for padding, initializing ranges, or replacing segments without touching untouched indices.
+
+```js
+// Create 5 empty slots, then fill middle ones with placeholder
+const slots = new Array(5); // [undefined, undefined, undefined, undefined, undefined]
+
+slots.fill("N/A", 1, 4);
+
+console.log(slots);
+// ["N/A", "N/A", "N/A", "N/A", undefined]
+```
+
+Practical use: initializing a lookup array with defaults before populating specific positions:
+
+```js
+// Build an "employee at index" map where each position = employee id
+const slotMap = new Array(10).fill(null);
+// [null, null, ..., null] (10 slots)
+
+employees.forEach((emp) => {
+  const idx = emp.id; // pretend ids are used directly as indices
+  if (idx < slotMap.length) {
+    slotMap[idx] = emp.name;
+  }
+});
+
+console.log(slotMap[3]); // "Carol"
+console.log(slotMap[9]); // null (no employee with id 9 exists)
+```
+
+Use `fill` when you need to initialize ranges, pad arrays, or replace segments:
+
+```js
+// Pad a short array of scores to match expected length
+const scores = [85, 92]; // Only 2 scores recorded
+
+const padded = Array.from({ length: 4 }).fill(0);
+padded.fill(scores[0], 0, 1); // First slot gets 85
+padded.fill(scores[1], 1, 2); // Second slot gets 92
+
+console.log(padded);
+// [85, 92, 0, 0]
+```
+---

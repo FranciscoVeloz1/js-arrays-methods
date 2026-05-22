@@ -7,7 +7,7 @@ description: >
 
 ## Task
 
-When asked to add new JS array method section(s) to `.agents/book.md`, generate content matching existing sections exactly.
+When asked to add new JS array method section(s) to `book.md`, generate content matching existing sections exactly.
 
 **Do not alter** existing method sections. Insert new sections only under `## Methods` heading.
 
