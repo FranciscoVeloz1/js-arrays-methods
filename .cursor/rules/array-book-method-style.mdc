@@ -1,0 +1,48 @@
+---
+description: Style and structure for adding JS array method sections to book.md
+globs: book.md
+alwaysApply: false
+---
+
+# Adding a New Array Method to `book.md`
+
+When asked to add a new JS array method, **append a new section only**. Never edit, reorder, or rephrase existing methods, the intro, or the Source Data block.
+
+## Where & how to insert
+
+- Add the new section under `## Methods`, separated from neighbors by a `---` line above and below it (every method block is fenced by `---`).
+- Keep the existing trailing `---` at the end of the file as the final line.
+
+## Section skeleton (match exactly)
+
+```md
+### `methodName`
+
+**Definition:** One–three sentences. State what it does, whether it **mutates** the original or returns a **new array**, and the return value. Bold key behavior words (e.g. **end**, **in place**, **new array**).
+
+​```js
+// Lowercase comment describing the goal
+const result = employees.someMethod((emp) => ...);
+
+console.log(result);
+// expected output as a comment
+​```
+```
+
+## Hard rules
+
+1. **Heading:** `###` + method name in backticks, e.g. `` ### `flatMap` ``.
+2. **Definition line:** starts with `**Definition:**`. Mention mutation vs. non-mutation and the return value. Bold the critical keywords.
+3. **Examples use the shared dataset** — build from `employees`, `company.departments`, `emp.name/role/salary/active/skills`. Do not invent new top-level data; mirror existing realistic scenarios (salaries, active status, skills, names Alice→Grace).
+4. **Always show output** as `// ...` comments right after `console.log(...)`. Inline single-line results go on the same line (`console.log(x); // value`); multi-line array/object results go on the lines below, formatted like the existing examples.
+5. **Code style:** 2-space indent, double quotes, arrow callbacks named `emp`/`a`/`b`/`sum`/`map`, trailing commas in multi-line literals — exactly as elsewhere in the file.
+6. **Progressive examples:** lead with the simplest use, then add 1–2 follow-up blocks for variants (signature args, edge cases like `-1`/`undefined`, mutation caveats, or a practical "real-world" use). Separate them with short connective prose, lowercase and conversational (e.g. "If no match exists...", "You can also...").
+7. **Teaching tone:** explanatory, friendly, second person. For methods with signatures (`splice`, `slice`, `sort`), document params with a bullet list and/or a `Its signature is: \`...\`` line, matching `splice`/`slice`/`sort`.
+8. **Cross-reference** related methods when natural (as `flat` mentions `flatMap`, `some`/`every` reference each other), but only in prose.
+
+## Don't
+
+- Don't add headings beyond `###` and inline code; no tables, no extra `##` sections.
+- Don't change the book title, intro paragraphs, or Source Data.
+- Don't use semicolon/quote/indentation styles that differ from existing code blocks.
+- Don't output results you haven't mentally verified against the dataset.

@@ -779,47 +779,51 @@ When you need to both map and flatten by one level, `flatMap` is the more effici
 
 ### `fill`
 
-**Definition:** Sets all elements in an array from a start index to an end index (exclusive) to a given value. It mutates the original array and is useful for padding, initializing ranges, or replacing segments without touching untouched indices.
+**Definition:** Sets all elements in an array from a start index to an end index (exclusive) to a given value. It **mutates** the original array **in place** and returns the modified array.
+
+Its signature is: `array.fill(value, startIndex, endIndex)`
+
+- `value` — the value to fill with
+- `startIndex` — where to start filling (defaults to `0`)
+- `endIndex` — where to stop filling, exclusive (defaults to `array.length`)
 
 ```js
-// Create 5 empty slots, then fill middle ones with placeholder
-const slots = new Array(5); // [undefined, undefined, undefined, undefined, undefined]
+// Fill all employee names with a placeholder
+const names = employees.map((emp) => emp.name);
+// ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
 
-slots.fill("N/A", 1, 4);
+names.fill("TBD");
 
-console.log(slots);
-// ["N/A", "N/A", "N/A", "N/A", undefined]
+console.log(names);
+// ["TBD", "TBD", "TBD", "TBD", "TBD", "TBD", "TBD"]
 ```
 
-Practical use: initializing a lookup array with defaults before populating specific positions:
+You can target a specific range by passing start and end indices:
 
 ```js
-// Build an "employee at index" map where each position = employee id
-const slotMap = new Array(10).fill(null);
-// [null, null, ..., null] (10 slots)
+// Replace only the middle three names with a placeholder
+const names = employees.map((emp) => emp.name);
+// ["Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
+
+names.fill("N/A", 2, 5);
+
+console.log(names);
+// ["Alice", "Bob", "N/A", "N/A", "N/A", "Frank", "Grace"]
+```
+
+It's also handy for initializing a lookup array with defaults before populating specific positions:
+
+```js
+// Build a slot map where each index corresponds to an employee id
+const slotMap = new Array(8).fill(null);
 
 employees.forEach((emp) => {
-  const idx = emp.id; // pretend ids are used directly as indices
-  if (idx < slotMap.length) {
-    slotMap[idx] = emp.name;
-  }
+  slotMap[emp.id] = emp.name;
 });
 
+console.log(slotMap);
+// [null, "Alice", "Bob", "Carol", "David", "Eva", "Frank", "Grace"]
 console.log(slotMap[3]); // "Carol"
-console.log(slotMap[9]); // null (no employee with id 9 exists)
-```
-
-Use `fill` when you need to initialize ranges, pad arrays, or replace segments:
-
-```js
-// Pad a short array of scores to match expected length
-const scores = [85, 92]; // Only 2 scores recorded
-
-const padded = Array.from({ length: 4 }).fill(0);
-padded.fill(scores[0], 0, 1); // First slot gets 85
-padded.fill(scores[1], 1, 2); // Second slot gets 92
-
-console.log(padded);
-// [85, 92, 0, 0]
+console.log(slotMap[0]); // null
 ```
 ---
